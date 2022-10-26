@@ -1,7 +1,5 @@
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -14,12 +12,23 @@ public class A {
   Scanner sc = new Scanner(System.in);
   String filePath = sc.nextLine();
   try {
-    BufferedReader reader = new BufferedReader(new FileReader(filePath), (8192/8));
-    String line;
-    while((line = reader.readLine()) != null) {
-      System.out.println(line);
+    FileInputStream fis = new FileInputStream(filePath);
+    //BufferedReader reader = new BufferedReader(new FileReader(filePath));
+    int byteRead = fis.read();
+    int sizeOfData = 1024;
+    byte[] data = new byte[sizeOfData];
+    int byteCount = 0;
+    int nodeCounter = 1; // B
+    while (byteRead != -1) {
+      data[byteCount++] = (byte) byteRead;
+      if (byteCount == sizeOfData) {
+        //send data
+        byteCount = 0;
+        nodeCounter++;
+      }
+      byteRead = fis.read();
     }
-    reader.close();
+    fis.close();
   } catch (IOException e) {
     e.printStackTrace();
   }
