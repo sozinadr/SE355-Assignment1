@@ -4,7 +4,7 @@ import java.net.*;
 public class C {
     public static void main(String[] args) {
         try {
-            Socket s = new Socket("localhost", 3000);
+            Socket s = new Socket("localhost", 1003);
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream("NewFile1.pdf"));
             BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream());
         } catch (IOException e) {
