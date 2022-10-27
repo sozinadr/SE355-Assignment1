@@ -7,7 +7,14 @@ public class B {
             Socket s1 = s.accept();
             System.out.println("Connection Established");
             BufferedInputStream bis = new BufferedInputStream(s1.getInputStream());
-            System.out.println(bis.readAllBytes());
+
+            while (true) {
+                int i = bis.read();
+                if (i == -1) {
+                    break;
+                }
+                System.out.println(i);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

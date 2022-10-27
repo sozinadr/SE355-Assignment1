@@ -34,11 +34,11 @@ public class A {
 
           if (byteCount == sizeOfData) { // if the byte array is full (1KB reached)
             // send data to the nodes
-            // Socket s = new Socket("localhost", 1002 + (nodeCounter++ % 6)); // connect to the nodes
+            //Socket s = new Socket("localhost", 1002 + (nodeCounter++ % 6)); // connect to the nodes
             Socket s = new Socket("localhost", 1002); // connect to the nodes
             System.out.println("Connection Established");
             BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream()); // get the output stream of the nodes
-            bos.write(data); // write the data to the output stream
+            bos.write(data);; // write the data to the output stream
             byteCount = 0; // reset the byte count
             bos.flush(); // flush the output stream
           }
