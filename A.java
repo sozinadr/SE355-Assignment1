@@ -50,4 +50,15 @@ public class A {
       }
     }
   }
+
+  // void dataMerge(byte[] buffer, int byteCount) {
+  //   // to merge the data from the nodes
+  //   try {
+  //     FileOutputStream fos = new FileOutputStream("newSend.java");
+  //     fos.write(buffer, 0, byteCount);
+  //     fos.close();
+  //   } catch (IOException e) {
+  //     e.printStackTrace();
+  //   }
+  // }
 }
