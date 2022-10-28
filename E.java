@@ -9,8 +9,7 @@ public class E {
             Socket s1 = s.accept();
             System.out.println("Connection Established");
             BufferedInputStream bis = new BufferedInputStream(s1.getInputStream());
-
-              int sizeOfData = 1024; // 1KB
+            int sizeOfData = 1024; // 1KB
             byte[] data = new byte[sizeOfData]; // create a byte array of size 1KB
             int byteCount = 0; // count the number of bytes read
 
@@ -31,7 +30,6 @@ public class E {
                     fos.flush(); // flush the output stream
                 }
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();

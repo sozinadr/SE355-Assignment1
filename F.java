@@ -2,7 +2,6 @@ import java.io.*;
 import java.net.*;
 
 public class F {
-    
 
     public static void main(String[] args) {
         try {
@@ -31,7 +30,6 @@ public class F {
                     fos.flush(); // flush the output stream
                 }
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();
