@@ -34,28 +34,21 @@ public class A {
         while (byteRead != -1) { // while the end of the file is not reached
 
           data[byteCount++] = (byte) byteRead; // store the byte in the byte array
-
+          
           if (byteCount == sizeOfData) { // if the byte array is full (1KB reached)
-            // send data to the nodes
-            Socket s = new Socket("localhost", 1002 + (nodeCounter++ % 6)); // connect to
-            // the nodes
-            // Socket s = new Socket("localhost", 1002); // connect to the nodes
+            // send the data to the node
+            Socket s = new Socket("localhost", 1002 + (nodeCounter++ % 6)); // connect to the nodes
             System.out.println("Connection Established");
-            BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream()); // get the output stream of the
-                                                                                      // nodes
-            bos.write(data);
-             // write the data to the output stream
+            BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream()); // get the output stream of the nodes
+            bos.write(data); // write the data to the output stream
             byteCount = 0; // reset the byte count
             data = new byte[sizeOfData]; // create a new byte array
             bos.flush(); // flush the output stream
           }
           byteRead = fis.read(); // read the next byte
-          if (byteRead == -1) { // if the end of the file is reached
-            // send the remaining data to the nodes
-            Socket s = new Socket("localhost", 1002 + (nodeCounter++ % 6)); // connect to
-            // the nodes
-            BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream()); // get the output stream of the
-                                                                                      // nodes
+          if (byteRead == -1) { // if the end of the file is reached send the remaining data to the nodes
+            Socket s = new Socket("localhost", 1002 + (nodeCounter++ % 6)); // connect to the nodes
+            BufferedOutputStream bos = new BufferedOutputStream(s.getOutputStream()); // get the output stream of the nodes
             bos.write(data);
             // write the data to the output stream
             byteCount = 0; // reset the byte count

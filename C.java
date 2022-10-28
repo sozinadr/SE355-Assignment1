@@ -1,9 +1,6 @@
 import java.io.*;
 import java.net.*;
-import java.util.LinkedList;
-
 public class C {
-    static LinkedList<Byte> dataC = new LinkedList<Byte>();
 
     public static void main(String[] args) {
         try {
@@ -12,18 +9,27 @@ public class C {
             System.out.println("Connection Established");
             BufferedInputStream bis = new BufferedInputStream(s1.getInputStream());
 
+            int sizeOfData = 1024; // 1KB
+            byte[] data = new byte[sizeOfData]; // create a byte array of size 1KB
+            int byteCount = 0; // count the number of bytes read
+
             while (true) {
-                int bytes = bis.read();
-                if (bytes == -1) {
-                    dataC.add((byte) bytes);
+                int byteRead = bis.read();
+                if (byteRead == -1) { // end of stream
                     break;
                 }
-                System.out.print((char) bytes);
+                data[byteCount++] = (byte) byteRead; // store the byte in the byte array
+                if (byteCount == sizeOfData) { // if the byte array is full (1KB reached)
+                    // write the data to the file
+                    FileOutputStream fos = new FileOutputStream("C.txt", true);
+                    for (int i = 0; i < data.length; i++) { // write the data to the file
+                        fos.write(data[i]);
+                    }
+                    byteCount = 0; // reset the byte count
+                    data = new byte[sizeOfData]; // create a new byte array
+                    fos.flush(); // flush the output stream
+                }
             }
-
-            // for (int i = 0; i < dataC.size(); i++) {
-            //     System.out.print((char) dataC.get(i).byteValue());
-            // }
 
         } catch (IOException e) {
             e.printStackTrace();
