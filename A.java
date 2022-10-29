@@ -3,15 +3,15 @@ import java.net.*;
 import java.util.Scanner;
 
 public class A {
-  static ServerSocket ss = null;
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     System.out.println("Enter the file name");
     String fileName = sc.nextLine();
     int nodeCounter = 0; // to keep track of the node number
+    int retrieveNodeCounter = 0; // to keep track of the node number
 
     try {
-      ss = new ServerSocket(1001);
+      ServerSocket ss = new ServerSocket(1001);
       FileInputStream fis = new FileInputStream(fileName);
       while (true) {
         try {
@@ -42,9 +42,16 @@ public class A {
         }
       }
 
+      System.out.println("Do you want to retrieve the data back?");
+      String choice = sc.nextLine();
       while (true) {
-        System.out.println("checkpoint 1");
-        nodeMerge();
+        if (choice.equals("yes")) {
+          retrieveData(retrieveNodeCounter);
+        } else if (choice.equals("no")) {
+          break;
+        } else {
+          System.out.println("Invalid choice");
+        }
         System.out.println("checkpoint 2");
       }
 
@@ -75,33 +82,28 @@ public class A {
     }
   }
 
-static void nodeMerge () {
+static void retrieveData(int nodeCounter) {
+  int byteRead2 = 0;
     try {
-        //ServerSocket ss = new ServerSocket(1007);
-        Socket s = ss.accept();
-        System.out.println("Connection Established");
+        Socket s = new Socket("localhost", (2002 + nodeCounter % 1));
+        System.out.print("socket Changed to port: " + (1002 + nodeCounter % 1) + "\n");
+        DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+        dos.writeUTF("retrieve");
         BufferedInputStream bis = new BufferedInputStream(s.getInputStream());
         FileOutputStream fos = new FileOutputStream("A.cpp", true);
-        int byteRead = bis.read();
         for (int i = 0; i < 1024; i++) {
-          if (byteRead == 255 || byteRead == -1) {
+          byteRead2 = bis.read();
+          if (byteRead2 == 255 || byteRead2 == -1) {
             break;
           }
-          fos.write(byteRead);
+          fos.write(byteRead2);
           fos.flush();
+        }
+        if (byteRead2 == 255 || byteRead2 == -1) {
+          fos.close();
         }
     } catch (IOException e) {
         e.printStackTrace();
     }
   }
 }
-  // void dataMerge(byte[] buffer, int byteCount) {
-  // // to merge the data from the nodes
-  // try {
-  // FileOutputStream fos = new FileOutputStream("newSend.java");
-  // fos.write(buffer, 0, byteCount);
-  // fos.close();
-  // } catch (IOException e) {
-  // e.printStackTrace();
-  // }
-  // }
