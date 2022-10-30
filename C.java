@@ -19,18 +19,15 @@ public class C {
                             System.out.println("check point 2");
                             break;
                         }
-                        System.out.println("check point 3");
                         fos.write(byteRead);
-                        System.out.println("check point 4");
                         fos.flush();
                     }
                     if (byteRead == -1 || byteRead == 255) {
-                        
                         fos.close();
                         break;
                     }
                 } catch (IOException e) {
-                    break;
+                    e.printStackTrace();
                 }
 
             }

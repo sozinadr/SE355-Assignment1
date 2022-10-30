@@ -26,7 +26,7 @@ public class F {
                         break;
                     }
                 } catch (IOException e) {
-                    break;
+                      e.printStackTrace();
                 }
 
             }
