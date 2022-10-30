@@ -1,32 +1,25 @@
 import java.io.*;
 import java.net.*;
+
 public class F {
+    static int checker;
+
     public static void main(String[] args) {
         try {
-            int byteRead = 0;
+            // int byteRead = 0;
             ServerSocket ss = new ServerSocket(1006);
             FileOutputStream fos = new FileOutputStream("F.cpp", true);
             FileInputStream fis = new FileInputStream("F.cpp");
             while (true) {
                 try {
                     Socket s = ss.accept();
-                    System.out.println("Connection Established");
-                    BufferedInputStream bis = new BufferedInputStream(s.getInputStream());
-                    for (int i = 0; i < 1024; i++) {
-                        byteRead = bis.read();
-                        if (byteRead == -1 || byteRead == 255) {
-                            System.out.println("check point 2");
-                            break;
-                        }
-                        fos.write(byteRead);
-                        fos.flush();
-                    }
-                    if (byteRead == -1 || byteRead == 255) {
+                    retrieveData(s);
+                    if (checker == -1) {
                         fos.close();
                         break;
                     }
                 } catch (IOException e) {
-                      e.printStackTrace();
+                    e.printStackTrace();
                 }
 
             }
@@ -40,7 +33,7 @@ public class F {
             while (true) {
                 try (ServerSocket ss2 = new ServerSocket(2006)) {
                     Socket s = ss2.accept();
-                    System.out.println("check point 3");
+                    System.out.println("check point 2");
                     int byteRead2 = fis.read(); // read a byte from the file
                     int sizeOfData = 1024; // 1KB
                     byte[] data = new byte[sizeOfData]; // create a byte array of size 1KB
@@ -71,6 +64,60 @@ public class F {
         }
     }
 
+    // send backup data to next node
+
+    static void retrieveData(Socket s) {
+        try {
+            int byteRead = 0;
+            FileOutputStream fos = new FileOutputStream("F.cpp", true);
+            BufferedInputStream bis = new BufferedInputStream(s.getInputStream());
+            for (int i = 0; i < 1024; i++) {
+                byteRead = bis.read();
+                if (byteRead == -1 || byteRead == 255) {
+                    System.out.println("check point 3");
+                    break;
+                }
+                fos.write(byteRead);
+                fos.flush();
+            }
+            if (byteRead == -1 || byteRead == 255) {
+                fos.close();
+                checker = -1;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void retrieveBackup(Socket s) {
+        try {
+            int byteRead = 0;
+            FileOutputStream fos = new FileOutputStream("Ebackup.cpp", true);
+            while (true) {
+                try {
+                    BufferedInputStream bis = new BufferedInputStream(s.getInputStream());
+                    for (int i = 0; i < 1024; i++) {
+                        byteRead = bis.read();
+                        if (byteRead == -1 || byteRead == 255) {
+                            System.out.println("check point 2");
+                            break;
+                        }
+                        fos.write(byteRead);
+                        fos.flush();
+                    }
+                    if (byteRead == -1 || byteRead == 255) {
+                        fos.close();
+                        break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     static void sendArrayBackToA(byte[] data, Socket s) {
         try {
             // System.out.println("did connect or no??");
@@ -88,47 +135,9 @@ public class F {
                     bos.flush();
                 }
                 bos.close();
-                s.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
-
-
-
-
-
-//         try {
-//             ServerSocket s = new ServerSocket(1006);
-//             Socket s1 = s.accept();
-//             System.out.println("Connection Established");
-//             BufferedInputStream bis = new BufferedInputStream(s1.getInputStream());
-//             int sizeOfData = 1024; // 1KB
-//             byte[] data = new byte[sizeOfData]; // create a byte array of size 1KB
-//             int byteCount = 0; // count the number of bytes read
-
-//             while (true) {
-//                 int byteRead = bis.read();
-//                 if (byteRead == -1) { // end of stream
-//                     break;
-//                 }
-//                 data[byteCount++] = (byte) byteRead; // store the byte in the byte array
-//                 if (byteCount == sizeOfData) { // if the byte array is full (1KB reached)
-//                     // write the data to the file
-//                     FileOutputStream fos = new FileOutputStream("F.txt", true);
-//                     for (int i = 0; i < data.length; i++) { // write the data to the file
-//                         fos.write(data[i]);
-//                     }
-//                     byteCount = 0; // reset the byte count
-//                     data = new byte[sizeOfData]; // create a new byte array
-//                     fos.flush(); // flush the output stream
-//                 }
-//             }
-
-//         } catch (IOException e) {
-//             e.printStackTrace();
-//         }
-//     }
-// }
